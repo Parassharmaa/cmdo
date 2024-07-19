@@ -1,6 +1,6 @@
 ## Overview
 
-This utility script allows users to generate terminal commands.
+This utility script allows users to generate terminal commands using natural language descriptions.
 
 ### Installation
 

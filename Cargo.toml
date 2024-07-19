@@ -1,8 +1,8 @@
 [package]
 name = "cmdo-gen"
-version = "0.2.0"
+version = "0.2.3"
 edition = "2021"
-description = "A utility script allows to generate terminal commands."
+description = "Utility script to generate terminal commands using natural language"
 repository = "https://github.com/parassharmaa/cmdo"
 readme = "README.md"
 keywords = ["rust"]

@@ -70,8 +70,7 @@ async fn generate_command(action: String) -> String {
                 .message
                 .content
                 .into_iter()
-                // remove ``` from the start and end of the command```
-                .map(move |s| s.trim_matches('`').to_string())
+                .map(move |s| s.replace('`', "").to_string())
                 .collect();
             result
         }
