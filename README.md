@@ -6,6 +6,8 @@ This utility script allows users to generate terminal commands using natural lan
 
 To install the script, run the following command:
 
+![demo](./assets/demo.png)
+
 ```sh
 npm install -g cmdo-gen
 ```
