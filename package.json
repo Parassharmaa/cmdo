@@ -15,9 +15,7 @@
     "type": "git",
     "url": "https://github.com/parassharmaa/cmdo.git"
   },
-  "keywords": [
-    "rust"
-  ],
+  "keywords": ["rust"],
   "author": "Paras Sharma <mail2paras.s@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -32,3 +30,4 @@
     "LICENSE"
   ]
 }
+    
