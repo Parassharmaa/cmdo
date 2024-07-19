@@ -9,7 +9,7 @@ This utility script allows users to generate terminal commands.
 Before generating commands, you need to set your OpenAI API key. Run the following command:
 
 ```sh
-cargo run -- set-key <your-openai-api-key>
+cmdo set-key <your-openai-api-key>
 ```
 
 This will save your API key to a configuration file in your home directory (`~/.cmd.config`).
@@ -19,13 +19,13 @@ This will save your API key to a configuration file in your home directory (`~/.
 To generate a terminal command based on an action description, run:
 
 ```sh
-cargo run -- gen "<action-description>"
+cmdo gen "<action-description>"
 ```
 
 For example:
 
 ```sh
-cargo run -- gen "list all files in the current directory"
+cmdo gen "list all files in the current directory"
 ```
 
 The script will generate a command and prompt you to either copy it to the clipboard or exit.
@@ -40,13 +40,13 @@ The script will generate a command and prompt you to either copy it to the clipb
 ### Setting the API Key
 
 ```sh
-cargo run -- set-key sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+cmdo set-key sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Generating a Command
 
 ```sh
-cargo run gen "restart all the pods using kubectl"
+cmdo gen "restart all the pods using kubectl"
 ```
 
 Output:

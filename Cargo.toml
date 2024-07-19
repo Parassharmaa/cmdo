@@ -1,6 +1,6 @@
 [package]
 name = "cmdo-gen"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "A utility script allows to generate terminal commands."
 repository = "https://github.com/parassharmaa/cmdo"
@@ -16,3 +16,7 @@ async-openai = "0.23.4"
 clap = { version = "4.5.9", features = ["derive"] }
 copypasta = "0.10.1"
 tokio = { version= "1.38.1", features = ["full", "rt-multi-thread"] }
+
+[[bin]]
+name="cmdo"
+path="src/main.rs"

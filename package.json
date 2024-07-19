@@ -1,6 +1,6 @@
 {
   "name": "cmdo-gen",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A utility script allows to generate terminal commands.",
   "main": "start.js",
   "directories": {
@@ -11,11 +11,16 @@
     "postinstall": "node ./pre-install.js",
     "uninstall": "node ./uninstall.js"
   },
+  "bin": {
+    "cmdo": "./start.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/parassharmaa/cmdo.git"
   },
-  "keywords": ["rust"],
+  "keywords": [
+    "rust"
+  ],
   "author": "Paras Sharma <mail2paras.s@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -30,4 +35,3 @@
     "LICENSE"
   ]
 }
-    
