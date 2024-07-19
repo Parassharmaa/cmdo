@@ -1,0 +1,33 @@
+{
+  "name": "cmdo",
+  "version": "0.1.0",
+  "description": "A utility script allows to generate terminal commands.",
+  "main": "start.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node ./pre-install.js",
+    "uninstall": "node ./uninstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parassharmaa/cmdo.git"
+  },
+  "keywords": ["rust"],
+  "author": "Paras Sharma <mail2paras.s@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/parassharmaa/cmdo/issues"
+  },
+  "homepage": "https://github.com/parassharmaa/cmdo",
+  "files": [
+    "pre-install.js",
+    "start.js",
+    "uninstall.js",
+    "README.md",
+    "LICENSE"
+  ]
+}
+    

@@ -2,6 +2,14 @@
 name = "cmdo"
 version = "0.1.0"
 edition = "2021"
+description = "A utility script allows to generate terminal commands."
+repository = "https://github.com/parassharmaa/cmdo"
+readme = "README.md"
+keywords = ["rust"]
+categories = ["command-line-utilities"]
+license = "MIT"
+homepage = "https://github.com/parassharmaa/cmdo"
+authors = ["Paras Sharma <mail2paras.s@gmail.com>"]
 
 [dependencies]
 async-openai = "0.23.4"
