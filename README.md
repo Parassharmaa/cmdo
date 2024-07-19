@@ -2,6 +2,20 @@
 
 This utility script allows users to generate terminal commands.
 
+### Installation
+
+To install the script, run the following command:
+
+```sh
+npm install -g cmdo-gen
+```
+
+or 
+
+```
+cargo install cmdo-gen
+```
+
 ## Usage
 
 ### 1. Setting the OpenAI API Key
