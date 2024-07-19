@@ -25,7 +25,9 @@ enum Commands {
     SETKEY { value: String },
 }
 
-const SYSTEM_PROMPT:&str = "Generate a command to do the given action in the terminal. Only put the command inside ``` and don't put sudo in the command. For example, if you want to generate a command to list all files in the current directory, you would put `ls`.";
+const SYSTEM_PROMPT:&str = "Generate a command to do the given action in the terminal. \
+Only put the command inside ``` and don't put sudo in the command. \
+For example, if you want to generate a command to list all files in the current directory, you would put `ls`.";
 
 async fn generate_command(action: String) -> String {
     // read openai key from ~/.cmd.config
@@ -91,13 +93,13 @@ async fn main() {
     }
 
     if let Some(Commands::GEN { value }) = &args.cmd {
-        println!("Generating text with value {}", value);
+        println!("cmdo generating command for: {}", value);
 
         let cmd_to_run = generate_command(value.clone()).await;
 
         // loop and wait for the user to confirm the command
         loop {
-            println!("Generated command: {}", cmd_to_run);
+            println!("\nGenerated command: {}", cmd_to_run);
             println!("Press (c) to copy the command to the clipboard or (e) to exit");
             let mut input = String::new();
             std::io::stdin().read_line(&mut input).unwrap();
