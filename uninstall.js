@@ -27,18 +27,18 @@ if (fs.existsSync(cargoDir)) {
   );
 }
     
-const binp = path.join(cargoDir, "bin", "cmdo");
+const binp = path.join(cargoDir, "bin", "cmdo-gen");
 
 if (fs.existsSync(binp)) {
-  console.log("Uninstalling cmdo...");
-  exec(`cargo uninstall cmdo`, (error, stdout, stderr) => {
+  console.log("Uninstalling cmdo-gen...");
+  exec(`cargo uninstall cmdo-gen`, (error, stdout, stderr) => {
     console.log(stdout);
     if (error || stderr) {
       console.log(error || stderr);
     }
   });
 } else {
-  console.log("cmdo not found skipping!");
+  console.log("cmdo-gen not found skipping!");
 }
     
     

@@ -1,5 +1,5 @@
 {
-  "name": "cmdo",
+  "name": "cmdo-gen",
   "version": "0.1.0",
   "description": "A utility script allows to generate terminal commands.",
   "main": "start.js",
