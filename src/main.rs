@@ -7,8 +7,13 @@ use async_openai::{
     Client,
 };
 use clap::{Parser, Subcommand};
+use colored::*;
 use copypasta::{ClipboardContext, ClipboardProvider};
-use std::{fs::File, io::Write};
+use std::{
+    fs::File,
+    io::{BufRead, BufReader, Write},
+    process::Stdio,
+};
 
 #[derive(Parser, Debug)]
 #[command(version, about)]
@@ -82,7 +87,7 @@ async fn main() {
 
     // if open ai key then save the key in ~./cmd.config
     if let Some(Commands::SETKEY { value }) = &args.cmd {
-        println!("Setting OpenAI key to {}", "*".repeat(10),);
+        println!("Setting OpenAI key to {}.", "*".repeat(value.len()).green(),);
         let home = std::env::var("HOME").unwrap();
 
         let path = format!("{}/.cmd.config", home);
@@ -93,27 +98,73 @@ async fn main() {
     }
 
     if let Some(Commands::GEN { value }) = &args.cmd {
-        println!("cmdo generating command for: {}", value);
+        println!("{}: {}", "crafting command for".bold(), value.blue());
 
-        let cmd_to_run = generate_command(value.clone()).await;
+        let mut cmd_to_run = generate_command(value.clone()).await;
 
-        // loop and wait for the user to confirm the command
+        cmd_to_run = cmd_to_run.trim().to_string();
+
         loop {
-            println!("\nGenerated command: {}", cmd_to_run);
-            println!("Press (c) to copy the command to the clipboard or (e) to exit");
+            println!("\n{} {}", ">".green().bold(), cmd_to_run.green().bold());
+
+            println!("\n{}", "(c) copy, (e) execute, (q) quit".blue().bold());
+
             let mut input = String::new();
             std::io::stdin().read_line(&mut input).unwrap();
+
+            // convert input to lower case
+            let input = input.to_lowercase();
+
             let input = input.trim();
-            if input == "c" {
-                // copy the command to the clipboard
-                let mut ctx = ClipboardContext::new().unwrap();
 
-                ctx.set_contents(cmd_to_run).unwrap();
+            match input {
+                "c" => {
+                    // copy the command to the clipbonard
+                    let mut ctx = ClipboardContext::new().unwrap();
 
-                println!("Command copied to clipboard");
-                break;
-            } else if input == "e" {
-                return;
+                    ctx.set_contents(cmd_to_run).unwrap();
+
+                    println!("{}", "Command copied to clipboard".green());
+                    break;
+                }
+                "e" => {
+                    // run the command
+                    let mut child = std::process::Command::new("bash")
+                        .arg("-c")
+                        .arg(cmd_to_run)
+                        .stdout(Stdio::piped())
+                        .spawn()
+                        .expect("failed to execute process");
+
+                    // Ensure we have access to the child's stdout
+                    let stdout = child.stdout.take().expect("failed to capture stdout");
+
+                    // Create a BufReader for the stdout
+                    let reader = BufReader::new(stdout);
+
+                    println!("\n{}", "-".repeat(10).bold());
+                    // Stream the output line by line
+                    for line in reader.lines() {
+                        match line {
+                            Ok(line) => println!("{}", line.bold()),
+                            Err(e) => eprintln!(
+                                "{}: {}",
+                                "Error reading line: {}".red(),
+                                e.to_string().red()
+                            ),
+                        }
+                    }
+
+                    println!("{}", "-".repeat(10).bold());
+
+                    break;
+                }
+                "q" => {
+                    return;
+                }
+                _ => {
+                    println!("Invalid input");
+                }
             }
         }
     }

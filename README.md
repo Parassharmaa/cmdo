@@ -60,17 +60,17 @@ cmdo set-key sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ### Generating a Command
 
 ```sh
-cmdo gen "restart all the pods using kubectl"
+cmdo gen "ping google.com 3 times"
 ```
 
 Output:
 
 ```
-cmdo generating command for: restart all the pods using kubectl
+crafting command for: ping google.com 3 times
 
-Generated command: kubectl rollout restart deployment --all
+> ping -c 3 google.com
 
-Press (c) to copy the command to the clipboard or (e) to exit
+(c) copy, (e) execute, (q) quit
 ```
 
 ## Contributing
