@@ -32,9 +32,10 @@ enum Commands {
 
 const SYSTEM_PROMPT:&str = "Generate a command to do the given action in the terminal. \
 Only put the command inside ``` and don't put sudo in the command. \
+Do not put bash or sh at the beginning of the command. \
 For example, if you want to generate a command to list all files in the current directory, you would put `ls`.";
 
-async fn generate_command(action: String) -> String {
+async fn generate_command(action: String) -> Vec<String> {
     // read openai key from ~/.cmd.config
     let home = std::env::var("HOME").unwrap();
     let path = format!("{}/.cmd.config", home);
@@ -66,13 +67,18 @@ async fn generate_command(action: String) -> String {
     match response {
         Ok(response) => {
             let completion = response.choices[0].clone();
-            let result = completion
+            let result: String = completion
                 .message
                 .content
                 .into_iter()
                 .map(move |s| s.replace('`', "").to_string())
                 .collect();
-            result
+
+            String::from(result)
+                .split("\n")
+                .map(|s| s.to_string())
+                .filter(|s| s.len() > 0)
+                .collect()
         }
         Err(e) => {
             panic!("Error: {:?}", e);
@@ -101,10 +107,12 @@ async fn main() {
 
         let mut cmd_to_run = generate_command(value.clone()).await;
 
-        cmd_to_run = cmd_to_run.trim().to_string();
+        // loop through cmd_to_run
 
         loop {
-            println!("\n{} {}", ">".green().bold(), cmd_to_run.green().bold());
+            for cmd in cmd_to_run.iter() {
+                println!("\n{} {}", ">".green().bold(), cmd.green().bold());
+            }
 
             println!("\n{}", "(c) copy, (e) execute, (q) quit".blue().bold());
 
@@ -121,42 +129,54 @@ async fn main() {
                     // copy the command to the clipbonard
                     let mut ctx = ClipboardContext::new().unwrap();
 
-                    ctx.set_contents(cmd_to_run).unwrap();
+                    ctx.set_contents(cmd_to_run.join(" && ").to_string())
+                        .unwrap();
 
                     println!("{}", "Command copied to clipboard".green());
-                    break;
+                    return;
                 }
                 "e" => {
-                    // run the command
-                    let mut child = std::process::Command::new("bash")
-                        .arg("-c")
-                        .arg(cmd_to_run)
-                        .stdout(Stdio::piped())
-                        .spawn()
-                        .expect("failed to execute process");
+                    for cmd in cmd_to_run.iter_mut() {
+                        // run the command
+                        let mut child = std::process::Command::new("bash")
+                            .arg("-c")
+                            .arg(cmd.trim().to_string())
+                            .stdout(Stdio::piped())
+                            .spawn()
+                            .expect("failed to execute process");
 
-                    // Ensure we have access to the child's stdout
-                    let stdout = child.stdout.take().expect("failed to capture stdout");
+                        // Ensure we have access to the child's stdout
+                        let stdout = child.stdout.take().expect("failed to capture stdout");
 
-                    // Create a BufReader for the stdout
-                    let reader = BufReader::new(stdout);
+                        // Create a BufReader for the stdout
+                        let reader = BufReader::new(stdout);
 
-                    println!("\n{}", "-".repeat(10).bold());
-                    // Stream the output line by line
-                    for line in reader.lines() {
-                        match line {
-                            Ok(line) => println!("{}", line.bold()),
-                            Err(e) => eprintln!(
+                        println!("\n{}", "-".repeat(10).bold());
+                        // Stream the output line by line
+                        for line in reader.lines() {
+                            match line {
+                                Ok(line) => println!("{}", line.bold()),
+                                Err(e) => eprintln!(
+                                    "{}: {}",
+                                    "Error reading line: {}".red(),
+                                    e.to_string().red()
+                                ),
+                            }
+                        }
+
+                        let exit_status = child.wait().expect("failed to wait on child");
+
+                        println!("{}", "-".repeat(10).bold());
+                        if !exit_status.success() {
+                            println!(
                                 "{}: {}",
-                                "Error reading line: {}".red(),
-                                e.to_string().red()
-                            ),
+                                "Command failed with exit code".red(),
+                                exit_status.code().unwrap()
+                            );
+                            return;
                         }
                     }
-
-                    println!("{}", "-".repeat(10).bold());
-
-                    break;
+                    return;
                 }
                 "q" => {
                     return;

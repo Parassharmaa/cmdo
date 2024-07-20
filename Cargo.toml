@@ -1,6 +1,6 @@
 [package]
 name = "cmdo-gen"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 description = "Utility script to generate terminal commands using natural language"
 repository = "https://github.com/parassharmaa/cmdo"

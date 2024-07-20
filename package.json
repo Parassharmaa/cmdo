@@ -1,6 +1,6 @@
 {
   "name": "cmdo-gen",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Utility script to generate terminal commands using natural language",
   "main": "start.js",
   "directories": {
